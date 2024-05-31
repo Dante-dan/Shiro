@@ -1,5 +1,6 @@
 import '../styles/index.css'
 
+import { Analytics } from '@vercel/analytics/react'
 import type { PropsWithChildren } from 'react'
 
 import { init } from './init'
@@ -12,6 +13,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       {children}
       <InitInClient />
       {/* <BrowserSupport /> */}
+      <Analytics />
     </>
   )
 }
