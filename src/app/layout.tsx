@@ -6,6 +6,16 @@ import type { PropsWithChildren } from 'react'
 import { init } from './init'
 import { InitInClient } from './InitInClient'
 
+const GoogleAdSense = () => {
+  return (
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7207000995546794"
+      crossOrigin="anonymous"
+    ></script>
+  )
+}
+
 init()
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
@@ -14,6 +24,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       <InitInClient />
       {/* <BrowserSupport /> */}
       <Analytics />
+      <GoogleAdSense />
     </>
   )
 }
