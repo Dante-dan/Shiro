@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from 'next'
 import type { PropsWithChildren } from 'react'
 
 import { ClerkProvider } from '@clerk/nextjs'
+import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
 
 import PKG from '~/../package.json'
 import { Global } from '~/components/common/Global'
@@ -122,6 +123,8 @@ export const generateMetadata = async (): Promise<Metadata> => {
   } satisfies Metadata
 }
 export const dynamic = 'force-dynamic'
+const GTM_ID = process.env.GTM_ID
+const GA_ID = process.env.GA_ID
 export default async function RootLayout(props: PropsWithChildren) {
   const { children } = props
 
@@ -132,6 +135,7 @@ export default async function RootLayout(props: PropsWithChildren) {
   if (data instanceof PreRenderError) {
     return (
       <html lang="zh-CN" className="noise themed" suppressHydrationWarning>
+        {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
         <head>
           <PublicEnvScript />
 
@@ -146,6 +150,7 @@ export default async function RootLayout(props: PropsWithChildren) {
             <br />
             {data.message}
           </div>
+          {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
         </body>
       </html>
     )
@@ -157,6 +162,7 @@ export default async function RootLayout(props: PropsWithChildren) {
     <ClerkProvider publishableKey={env('NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY')}>
       <AppFeatureProvider tmdb={!!process.env.TMDB_API_KEY}>
         <html lang="zh-CN" className="noise themed" suppressHydrationWarning>
+          {GTM_ID ? <GoogleTagManager gtmId={GTM_ID} /> : null}
           <head>
             <PublicEnvScript />
             <Global />
@@ -198,6 +204,7 @@ export default async function RootLayout(props: PropsWithChildren) {
               <ScrollTop />
               <div className="fixed inset-y-0 right-0 w-[var(--removed-body-scroll-bar-size)]" />
             </WebAppProviders>
+            {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
           </body>
         </html>
       </AppFeatureProvider>
@@ -208,14 +215,17 @@ export default async function RootLayout(props: PropsWithChildren) {
 const SayHi = () => {
   return (
     <script
+      // biome-ignore lint: noDangerouslySetInnerHtml
       dangerouslySetInnerHTML={{
         __html: `var version = "${version}";
     (${function () {
+      // biome-ignore lint: noConsoleLog
       console.log(
         `%c Mix Space %c https://github.com/mx-space `,
         'color: #fff; margin: 1em 0; padding: 5px 0; background: #2980b9;',
         'margin: 1em 0; padding: 5px 0; background: #efefef;',
       )
+      // biome-ignore lint: noConsoleLog
       console.log(
         `%c Shiro ${window.version} %c https://innei.in `,
         'color: #fff; margin: 1em 0; padding: 5px 0; background: #39C5BB;',
