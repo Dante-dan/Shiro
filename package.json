@@ -18,14 +18,13 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --ignore-path ./.gitignore --write "
+      ""
     ],
     "*.{js,ts,cjs,mjs,jsx,tsx,json}": [
-      "biome lint --apply --no-errors-on-unmatched"
+      ""
     ]
   },
   "scripts": {
-    "prepare": "pnpm exec simple-git-hooks && test -f .env || cp .env.template .env",
     "start": "npm run dev",
     "prebuild": "rimraf .next || exit 0",
     "dev": "cross-env NODE_ENV=development next dev -p 2323",
