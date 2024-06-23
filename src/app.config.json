@@ -74,8 +74,8 @@
       "scripts": []
     },
     "site": {
-      "favicon": "/favicon-small.gif",
-      "faviconDark": "/favicon-dark.png"
+      "favicon": "/favicon.svg",
+      "faviconDark": "/favicon-dark.svg"
     },
     "hero": {
       "title": {
