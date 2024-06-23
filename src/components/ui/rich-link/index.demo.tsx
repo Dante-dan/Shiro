@@ -6,8 +6,8 @@ import { SocialSourceLink } from './SocialSourceLink'
 export const RichLinkDemo: DocumentComponent = () => {
   return (
     <div className="flex flex-col gap-4">
-      <SocialSourceLink source="GH" name="Innei" />
-      <SocialSourceLink source="TW" name="__oQuery" />
+      <SocialSourceLink source="GH" name="Dante-dan" />
+      <SocialSourceLink source="TW" name="Dante21299538" />
     </div>
   )
 }
