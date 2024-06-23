@@ -122,6 +122,9 @@ importers:
       '@tanstack/react-query-persist-client':
         specifier: 5.37.1
         version: 5.37.1(@tanstack/react-query@5.37.1(react@18.3.1))(react@18.3.1)
+      '@types/katex':
+        specifier: ^0.16.7
+        version: 0.16.7
       '@upstash/redis':
         specifier: 1.31.2
         version: 1.31.2
@@ -188,6 +191,9 @@ importers:
       jsondiffpatch:
         specifier: ^0.6.0
         version: 0.6.0
+      katex:
+        specifier: ^0.16.10
+        version: 0.16.10
       kbar:
         specifier: 0.1.0-beta.45
         version: 0.1.0-beta.45(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1995,6 +2001,9 @@ packages:
 
   '@types/jsonfile@6.1.4':
     resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
+
+  '@types/katex@0.16.7':
+    resolution: {integrity: sha512-HMwFiRujE5PjrgwHQ25+bsLJgowjGjm5Z8FVSf0N6PwgJrwxH0QxzHYDcKsTfV3wva0vzrpqMTJS2jXPr5BMEQ==}
 
   '@types/lodash.debounce@4.0.9':
     resolution: {integrity: sha512-Ma5JcgTREwpLRwMM+XwBR7DaWe96nC38uCBDFKZWbNKD+osjVzdpnUSwBcqCptrp16sSOLBAUb50Car5I0TCsQ==}
@@ -6836,6 +6845,8 @@ snapshots:
     dependencies:
       '@types/node': 20.12.12
     optional: true
+
+  '@types/katex@0.16.7': {}
 
   '@types/lodash.debounce@4.0.9':
     dependencies:
