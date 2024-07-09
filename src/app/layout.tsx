@@ -3,6 +3,8 @@ import '../styles/index.css'
 import { Analytics } from '@vercel/analytics/react'
 import type { PropsWithChildren } from 'react'
 
+import { SpeedInsights } from '@vercel/speed-insights/next'
+
 import { init } from './init'
 import { InitInClient } from './InitInClient'
 
@@ -25,6 +27,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
       {/* <BrowserSupport /> */}
       <Analytics />
       <GoogleAdSense />
+      <SpeedInsights />
     </>
   )
 }
