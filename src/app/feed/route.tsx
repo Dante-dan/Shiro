@@ -48,7 +48,14 @@ export async function GET() {
       },
     }).then(
       (res) =>
-        res.text().then((text) => parser.parse(text)) as Promise<RSSProps>,
+        res.text().then((text) => {
+          // biome-ignore lint: noConsoleLog
+          console.log('origin text', text)
+          const xml = parser.parse(text)
+          // biome-ignore lint: noConsoleLog
+          console.log('xml', text)
+          return xml
+        }) as Promise<RSSProps>,
     ),
     fetchAggregationData(),
   ])
