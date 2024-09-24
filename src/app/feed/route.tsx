@@ -1,20 +1,12 @@
 import { XMLParser } from 'fast-xml-parser'
-import { compiler } from 'markdown-to-jsx'
-import RSS from 'rss'
-import xss from 'xss'
 import type { MarkdownToJSX } from 'markdown-to-jsx'
 
-import { CDN_HOST } from '~/app.static.config'
 import { AlertsRule as __AlertsRule } from '~/components/ui/markdown/parsers/alert'
 import { ContainerRule as __ContainerRule } from '~/components/ui/markdown/parsers/container'
-import { InsertRule } from '~/components/ui/markdown/parsers/ins'
 import {
   KateXBlockRule as __KateXBlockRule,
   KateXRule as __KateXRule,
 } from '~/components/ui/markdown/parsers/katex'
-import { MarkRule } from '~/components/ui/markdown/parsers/mark'
-import { MentionRule } from '~/components/ui/markdown/parsers/mention'
-import { SpoilerRule } from '~/components/ui/markdown/parsers/spoiler'
 import { apiClient } from '~/lib/request'
 
 import { fetchAggregationData } from '../(app)/api'
@@ -41,125 +33,18 @@ const parser = new XMLParser()
 export async function GET() {
   const ReactDOM = (await import('react-dom/server')).default
 
-  const [{ author, data, url }, agg] = await Promise.all([
+  const [rssText, agg] = await Promise.all([
     fetch(apiClient.aggregate.proxy.feed.toString(true), {
       next: {
         revalidate: 86400,
       },
-    }).then(
-      (res) =>
-        res.text().then((text) => {
-          // biome-ignore lint: noConsoleLog
-          console.log('origin text', text)
-          const xml = parser.parse(text)
-          // biome-ignore lint: noConsoleLog
-          console.log('xml', text)
-          return xml
-        }) as Promise<RSSProps>,
-    ),
+    }).then((res) => res.text()),
     fetchAggregationData(),
   ])
 
   const { title, description } = agg.seo
 
-  const now = new Date()
-  const feed = new RSS({
-    title,
-    description,
-    site_url: url,
-    feed_url: `${url}/feed`,
-    language: 'zh-CN',
-    image_url: `${url}/og`,
-    generator: 'Shiro (https://github.com/Innei/Shiro)',
-    pubDate: now.toUTCString(),
-  })
-
-  data.forEach((item) => {
-    const render = () => {
-      try {
-        return ReactDOM.renderToString(
-          <div>
-            <blockquote>
-              该渲染由 Shiro API 生成，可能存在排版问题，最佳体验请前往：
-              <a href={`${xss(item.link)}`}>{xss(item.link)}</a>
-            </blockquote>
-            {compiler(item.text, {
-              overrides: {
-                LinkCard: NotSupportRender,
-                Gallery: NotSupportRender,
-                Tabs: NotSupportRender,
-                Tab: NotSupportRender,
-
-                img: ({ src, alt }) => {
-                  if (src) {
-                    if (new URL(src).hostname === CDN_HOST) {
-                      return <span>此图片不支持在 RSS Render 中查看。</span>
-                    }
-                  }
-                  return <img src={src} alt={alt} />
-                },
-              },
-              extendsRules: {
-                codeBlock: {
-                  react(node, output, state) {
-                    if (
-                      node.lang === 'mermaid' ||
-                      node.lang === 'excalidraw' ||
-                      node.lang === 'component'
-                    ) {
-                      return <NotSupportRender />
-                    }
-                    return (
-                      <pre key={state.key}>
-                        <code className={node.lang ? `lang-${node.lang}` : ''}>
-                          {node.content}
-                        </code>
-                      </pre>
-                    )
-                  },
-                },
-              },
-              additionalParserRules: {
-                spoilder: SpoilerRule,
-                mention: MentionRule,
-
-                mark: MarkRule,
-                ins: InsertRule,
-
-                kateX: KateXRule,
-                kateXBlock: KateXBlockRule,
-                container: ContainerRule,
-                alerts: AlertsRule,
-              },
-            })}
-            <p
-              style={{
-                textAlign: 'right',
-              }}
-            >
-              <a href={`${`${xss(item.link)}#comments`}`}>看完了？说点什么呢</a>
-            </p>
-          </div>,
-        )
-      } catch {
-        return ReactDOM.renderToString(
-          <p>
-            当前内容无法在 RSS render 中正确渲染，请前往：
-            <a href={`${xss(item.link)}`}>${xss(item.link)}</a>
-          </p>,
-        )
-      }
-    }
-    feed.item({
-      author,
-      title: item.title,
-      url: item.link,
-      date: item.created!,
-      description: render(),
-    })
-  })
-
-  return new Response(feed.xml(), {
+  return new Response(rssText, {
     headers: {
       'Content-Type': 'application/xml',
       'Cache-Control': 'max-age=60, s-maxage=86400',
