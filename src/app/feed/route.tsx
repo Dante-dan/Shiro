@@ -1,3 +1,4 @@
+import { XMLParser } from 'fast-xml-parser'
 import { compiler } from 'markdown-to-jsx'
 import RSS from 'rss'
 import xss from 'xss'
@@ -35,6 +36,7 @@ interface RSSProps {
     id: string
   }[]
 }
+const parser = new XMLParser()
 
 export async function GET() {
   const ReactDOM = (await import('react-dom/server')).default
@@ -44,7 +46,10 @@ export async function GET() {
       next: {
         revalidate: 86400,
       },
-    }).then((res) => res.json() as Promise<RSSProps>),
+    }).then(
+      (res) =>
+        res.text().then((text) => parser.parse(text)) as Promise<RSSProps>,
+    ),
     fetchAggregationData(),
   ])
 
