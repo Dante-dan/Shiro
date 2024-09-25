@@ -1,4 +1,3 @@
-import { XMLParser } from 'fast-xml-parser'
 import type { MarkdownToJSX } from 'markdown-to-jsx'
 
 import { AlertsRule as __AlertsRule } from '~/components/ui/markdown/parsers/alert'
@@ -8,8 +7,6 @@ import {
   KateXRule as __KateXRule,
 } from '~/components/ui/markdown/parsers/katex'
 import { apiClient } from '~/lib/request'
-
-import { fetchAggregationData } from '../(app)/api'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 86400 // 1 day
@@ -28,7 +25,6 @@ interface RSSProps {
     id: string
   }[]
 }
-const parser = new XMLParser()
 
 export async function GET() {
   const ReactDOM = (await import('react-dom/server')).default
@@ -39,12 +35,14 @@ export async function GET() {
         revalidate: 86400,
       },
     }).then((res) => res.text()),
-    fetchAggregationData(),
   ])
 
-  const { title, description } = agg.seo
+  const res = rssText.replace(
+    '</description>',
+    `</description>\n<follow_challenge>/n<feedId>61367203288159232</feedId>\n<userId>41433237681165312</userId>\n</follow_challenge>\n`,
+  )
 
-  return new Response(rssText, {
+  return new Response(res, {
     headers: {
       'Content-Type': 'application/xml',
       'Cache-Control': 'max-age=60, s-maxage=86400',
