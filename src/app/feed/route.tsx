@@ -39,7 +39,7 @@ export async function GET() {
 
   const res = rssText.replace(
     '</description>',
-    `</description>\n<follow_challenge>/n<feedId>61367203288159232</feedId>\n<userId>41433237681165312</userId>\n</follow_challenge>\n`,
+    `</description>\n<follow_challenge>\n<feedId>61367203288159232</feedId>\n<userId>41433237681165312</userId>\n</follow_challenge>\n`,
   )
 
   return new Response(res, {
