@@ -29,7 +29,7 @@ interface RSSProps {
 export async function GET() {
   const ReactDOM = (await import('react-dom/server')).default
 
-  const [rssText, agg] = await Promise.all([
+  const [rssText] = await Promise.all([
     fetch(apiClient.aggregate.proxy.feed.toString(true), {
       next: {
         revalidate: 86400,
