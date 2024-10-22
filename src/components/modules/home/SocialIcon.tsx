@@ -26,7 +26,7 @@ const iconSet: Record<
   ],
   patreon: [
     'Patreon',
-    <i className="icon-[mingcute--github-line]" style={{ "--svg": "https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg" } as React.CSSProperties} />,
+    <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg')" } as React.CSSProperties} />,
     '#ffffff',
     (id) => `https://www.patreon.com/${id}`,
   ],
