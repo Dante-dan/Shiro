@@ -166,6 +166,14 @@ const Hero = () => {
             >
               <SocialIcon id='_dante' type='patreon' />
             </BottomToUpTransitionView>
+            <BottomToUpTransitionView
+              key='mail'
+              delay={(Object.entries(socialIds || noopObj).length + 1) * 100 + titleAnimateD + 500}
+              className="inline-block"
+              as="li"
+            >
+              <SocialIcon id='duanjl.china@gmail.com' type='mail' />
+            </BottomToUpTransitionView>
           </ul>
         </>
 
