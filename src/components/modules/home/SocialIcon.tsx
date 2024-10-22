@@ -26,8 +26,8 @@ const iconSet: Record<
   ],
   patreon: [
     'Patreon',
-    <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg')" } as React.CSSProperties} />,
-    '#ffffff',
+    <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg')", backgroundColor: '#000000' } as React.CSSProperties} />,
+    'rgba(255,255,255,0)',
     (id) => `https://www.patreon.com/${id}`,
   ],
   twitter: [
