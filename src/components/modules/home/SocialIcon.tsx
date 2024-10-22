@@ -130,6 +130,14 @@ export const SocialIcon = memo((props: SocialIconProps) => {
           >
             {Icon}
           </a>
+          <a
+            target="_blank"
+            href="https://www.patreon.com/_dante"
+            className="flex center"
+            rel="noreferrer"
+          >
+            <i className="icon-[mingcute--github-line]" style={{ maskImage: 'https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg' }} />,
+          </a>
         </MotionButtonBase>
       }
     >
