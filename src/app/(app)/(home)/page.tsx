@@ -159,12 +159,12 @@ const Hero = () => {
               },
             )}
             <BottomToUpTransitionView
-              key='Patreon'
+              key='patreon'
               delay={(Object.entries(socialIds || noopObj).length) * 100 + titleAnimateD + 500}
               className="inline-block"
               as="li"
             >
-              <SocialIcon id='_dante' type='Patreon' />
+              <SocialIcon id='_dante' type='patreon' />
             </BottomToUpTransitionView>
           </ul>
         </>
