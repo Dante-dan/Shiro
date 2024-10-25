@@ -34,7 +34,7 @@ const iconSet: Record<
     '小红书🚫已被禁言',
     <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://picasso-static.xiaohongshu.com/fe-platform/fbd46ec8a907ca6a8cacc9596f18ff495c639feb.png')" } as React.CSSProperties} />,
     'rgba(255,255,255,0)',
-    () => `https://www.xiaohongshu.com/user/profile/63dfc38b0000000027028600?xhsshare=CopyLink&appuid=63dfc38b0000000027028600&apptime=1729846120&share_id=6f5733401dad4554a5d35d2ef5982582`,
+    () => `https://img.dhpie.com/2024.10.22/fbd46ec8a907ca6a8cacc9596f18ff495c639feb.png`,
   ],
   twitter: [
     'Twitter',
