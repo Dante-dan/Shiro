@@ -134,7 +134,7 @@ export const SocialIcon = memo((props: SocialIconProps) => {
           className="flex aspect-square size-10 rounded-full text-2xl text-white center"
           style={{
             background: iconBg,
-            border: borderColor ? `dashed 0.5px ${borderColor}` : null,
+            border: borderColor ? `dashed 0.5px ${borderColor}` : 'none',
           }}
         >
           <a
