@@ -19,7 +19,7 @@ const iconSet: Record<
   [string, ReactNode, string, (id: string) => string]
 > = {
   github: [
-    'Github',
+    '对我的开发感兴趣 Github',
     <i className="icon-[mingcute--github-line]" />,
     '#181717',
     (id) => `https://github.com/${id}`,
@@ -98,7 +98,7 @@ const iconSet: Record<
     (id) => `https://weibo.com/${id}`,
   ],
   discord: [
-    'Discord',
+    '自由聊天 Discord',
     <i className="icon-[mingcute--discord-fill]" />,
     '#7289DA',
     (id) => `https://discord.gg/${id}`,
