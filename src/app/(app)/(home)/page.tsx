@@ -159,7 +159,6 @@ const Hero = () => {
               },
             )}
             <BottomToUpTransitionView
-              key='patreon'
               delay={(Object.entries(socialIds || noopObj).length) * 100 + titleAnimateD + 500}
               className="inline-block"
               as="li"
@@ -167,12 +166,32 @@ const Hero = () => {
               <SocialIcon id='_dante' type='patreon' />
             </BottomToUpTransitionView>
             <BottomToUpTransitionView
-              key='mail'
               delay={(Object.entries(socialIds || noopObj).length + 1) * 100 + titleAnimateD + 500}
               className="inline-block"
               as="li"
             >
               <SocialIcon id='duanjl.china@gmail.com' type='mail' />
+            </BottomToUpTransitionView>
+            <BottomToUpTransitionView
+              delay={(Object.entries(socialIds || noopObj).length + 2) * 100 + titleAnimateD + 500}
+              className="inline-block"
+              as="li"
+            >
+              <SocialIcon id='Dante21299538' type='x' />
+            </BottomToUpTransitionView>
+            <BottomToUpTransitionView
+              delay={(Object.entries(socialIds || noopObj).length + 3) * 100 + titleAnimateD + 500}
+              className="inline-block"
+              as="li"
+            >
+              <SocialIcon id='Dante21299538' type='redbook' />
+            </BottomToUpTransitionView>
+            <BottomToUpTransitionView
+              delay={(Object.entries(socialIds || noopObj).length + 4) * 100 + titleAnimateD + 500}
+              className="inline-block"
+              as="li"
+            >
+              <SocialIcon id='FgweF2k5' type='discord' />
             </BottomToUpTransitionView>
           </ul>
         </>
