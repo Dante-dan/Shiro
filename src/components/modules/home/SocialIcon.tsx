@@ -16,7 +16,7 @@ interface SocialIconProps {
 
 const iconSet: Record<
   string,
-  [string, ReactNode, string, (id: string) => string]
+  [string, ReactNode, string, (id: string) => string] | [string, ReactNode, string, (id: string) => string, string]
 > = {
   github: [
     '对我的开发感兴趣 Github',
@@ -27,14 +27,16 @@ const iconSet: Record<
   patreon: [
     '股票订阅 Patreon',
     <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg')", backgroundColor: '#000000' } as React.CSSProperties} />,
-    'rgba(255,255,255, 0.5)',
+    'rgba(255, 255, 255, 0)',
     (id) => `https://www.patreon.com/${id}`,
+    'rgba(0,0,0, 0.1)',
   ],
   redbook: [
     '小红书🚫已被禁言',
     <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/Xiaohongshu_idt4HnK8Zr_0.svg')", backgroundColor: '#FF0077' } as React.CSSProperties} />,
-    'rgba(255, 0, 119, 0.5)',
+    'rgba(255, 0, 119, 0)',
     () => `https://www.xiaohongshu.com/user/profile/63dfc38b0000000027028600?xhsshare=CopyLink&appuid=63dfc38b0000000027028600&apptime=1729846120&share_id=6f5733401dad4554a5d35d2ef5982582`,
+    'rgba(255, 0, 119, 0.1)',
   ],
   twitter: [
     'Twitter',
@@ -116,9 +118,9 @@ export const isSupportIcon = (icon: string) => icons.includes(icon)
 export const SocialIcon = memo((props: SocialIconProps) => {
   const { id, type } = props
 
-  const [name, Icon, iconBg, hrefFn] = useMemo(() => {
-    const [name, Icon, iconBg, hrefFn] = (iconSet as any)[type as any] || []
-    return [name, Icon, iconBg, hrefFn]
+  const [name, Icon, iconBg, hrefFn, borderColor] = useMemo(() => {
+    const [name, Icon, iconBg, hrefFn, borderColor] = (iconSet as any)[type as any] || []
+    return [name, Icon, iconBg, hrefFn, borderColor]
   }, [type])
 
   if (!name) return null
@@ -132,7 +134,7 @@ export const SocialIcon = memo((props: SocialIconProps) => {
           className="flex aspect-square size-10 rounded-full text-2xl text-white center"
           style={{
             background: iconBg,
-            border: `dashed 0.5px ${iconBg}`
+            border: borderColor ? `dashed 0.5px ${borderColor}` : null,
           }}
         >
           <a
