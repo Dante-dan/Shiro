@@ -18,7 +18,8 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml .npmrc ./
 COPY packages/fetch/package.json ./packages/fetch/
 
-RUN pnpm install --frozen-lockfile
+# Use --ignore-scripts to skip prepare script (simple-git-hooks fails without .git)
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # Stage 3: Builder
 FROM base AS builder
