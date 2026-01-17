@@ -1,64 +1,81 @@
-FROM node:18-alpine AS base
+# Stage 1: Base image with Node 20 and pnpm
+FROM node:20-alpine AS base
 
+# Install sharp globally for image optimization
 RUN npm install -g --arch=x64 --platform=linux sharp
 
+# Enable corepack and prepare pnpm 9
+RUN corepack enable && corepack prepare pnpm@9 --activate
+
+# Stage 2: Dependencies (cached unless package files change)
 FROM base AS deps
 
-RUN apk add --no-cache libc6-compat
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache libc6-compat python3 make g++
 
 WORKDIR /app
 
-COPY . .
+# Copy only package files for better layer caching
+COPY package.json pnpm-lock.yaml .npmrc ./
 
+RUN pnpm install --frozen-lockfile
 
-RUN npm install -g pnpm
-RUN pnpm install
-
+# Stage 3: Builder
 FROM base AS builder
 
 RUN apk update && apk add --no-cache git
 
-
 WORKDIR /app
-COPY --from=deps /app/ .
-RUN npm install -g pnpm
 
-ENV NODE_ENV production
-ARG BASE_URL
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy source code
+COPY . .
+
+# Build-time environment variables
+ARG NEXT_PUBLIC_GATEWAY_URL
+ARG NEXT_PUBLIC_API_URL
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ARG CLERK_SECRET_KEY
-ARG S3_ACCESS_KEY
-ARG S3_SECRET_KEY
-ARG WEBHOOK_SECRET
-ARG TMDB_API_KEY
-ARG GH_TOKEN
-ENV BASE_URL=${BASE_URL}
-ENV NEXT_PUBLIC_API_URL=${BASE_URL}/api/v2
-ENV NEXT_PUBLIC_GATEWAY_URL=${BASE_URL}
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-ENV CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
-ENV S3_ACCESS_KEY=${S3_ACCESS_KEY}
-ENV S3_SECRET_KEY=${S3_SECRET_KEY}
-ENV TMDB_API_KEY=${TMDB_API_KEY}
-ENV WEBHOOK_SECRET=${WEBHOOK_SECRET}
-ENV GH_TOKEN=${GH_TOKEN}
+ARG GA_ID
+ARG GTM_ID
 
+ENV NODE_ENV=production
+ENV NEXT_PUBLIC_GATEWAY_URL=${NEXT_PUBLIC_GATEWAY_URL}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build the application
 RUN pnpm build
 
-FROM base AS runner
+# Stage 4: Runner (minimal production image)
+FROM node:20-alpine AS runner
+
 WORKDIR /app
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
+ENV PORT=2323
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
 
-# and other docker env inject
+# Install sharp in runner for image optimization
+RUN npm install -g --arch=x64 --platform=linux sharp
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy standalone output
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/.next/server ./.next/server
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 2323
 
-ENV PORT 2323
-ENV NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
-CMD echo "Mix Space Web [Shiro] Image." && node server.js;
+# Health check for zero-downtime deployment
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
+  CMD wget -q --spider http://localhost:2323 || exit 1
+
+CMD ["node", "server.js"]
