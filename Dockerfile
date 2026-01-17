@@ -14,8 +14,9 @@ RUN apk add --no-cache libc6-compat python3 make g++
 
 WORKDIR /app
 
-# Copy only package files for better layer caching
+# Copy package files for layer caching (including workspace packages)
 COPY package.json pnpm-lock.yaml .npmrc ./
+COPY packages/fetch/package.json ./packages/fetch/
 
 RUN pnpm install --frozen-lockfile
 
