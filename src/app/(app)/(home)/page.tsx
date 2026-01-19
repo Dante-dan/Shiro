@@ -177,7 +177,7 @@ const Hero = () => {
               className="inline-block"
               as="li"
             >
-              <SocialIcon id='Dante21299538' type='x' />
+              <SocialIcon id='duanjl_china' type='x' />
             </BottomToUpTransitionView>
             <BottomToUpTransitionView
               delay={(Object.entries(socialIds || noopObj).length + 3) * 100 + titleAnimateD + 500}
