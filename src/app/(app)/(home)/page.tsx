@@ -55,8 +55,8 @@ const TwoColumnLayout = ({
   className,
 }: {
   children:
-    | [React.ReactNode, React.ReactNode]
-    | [React.ReactNode, React.ReactNode, React.ReactNode]
+  | [React.ReactNode, React.ReactNode]
+  | [React.ReactNode, React.ReactNode, React.ReactNode]
 
   leftContainerClassName?: string
   rightContainerClassName?: string
@@ -184,7 +184,7 @@ const Hero = () => {
               className="inline-block"
               as="li"
             >
-              <SocialIcon id='Dante21299538' type='redbook' />
+              <SocialIcon id='duanjl_china' type='redbook' />
             </BottomToUpTransitionView>
             <BottomToUpTransitionView
               delay={(Object.entries(socialIds || noopObj).length + 4) * 100 + titleAnimateD + 500}

@@ -7,7 +7,7 @@ export const RichLinkDemo: DocumentComponent = () => {
   return (
     <div className="flex flex-col gap-4">
       <SocialSourceLink source="GH" name="Dante-dan" />
-      <SocialSourceLink source="TW" name="Dante21299538" />
+      <SocialSourceLink source="TW" name="duanjl_china" />
     </div>
   )
 }
