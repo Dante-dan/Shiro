@@ -163,7 +163,7 @@ const Hero = () => {
               className="inline-block"
               as="li"
             >
-              <SocialIcon id='_dante' type='patreon' />
+              <SocialIcon id='蛋黄派的日常' type='wechat_oa' />
             </BottomToUpTransitionView>
             <BottomToUpTransitionView
               delay={(Object.entries(socialIds || noopObj).length + 1) * 100 + titleAnimateD + 500}

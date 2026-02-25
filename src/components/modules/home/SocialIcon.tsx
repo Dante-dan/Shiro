@@ -16,7 +16,7 @@ interface SocialIconProps {
 
 const iconSet: Record<
   string,
-  [string, ReactNode, string, (id: string) => string] | [string, ReactNode, string, (id: string) => string, string]
+  [string | ((id: string) => string), ReactNode, string, (id: string) => string] | [string | ((id: string) => string), ReactNode, string, (id: string) => string, string]
 > = {
   github: [
     '对我的开发感兴趣 Github',
@@ -24,12 +24,11 @@ const iconSet: Record<
     '#181717',
     (id) => `https://github.com/${id}`,
   ],
-  patreon: [
-    '股票订阅 Patreon',
-    <i className="icon-[mingcute--github-line]" style={{ "--svg": "url('https://img.dhpie.com/2024.10.22/PATREON_SYMBOL_1_BLACK_RGB.svg')", backgroundColor: '#000000' } as React.CSSProperties} />,
-    'rgba(255, 255, 255, 0)',
-    (id) => `https://www.patreon.com/${id}`,
-    'rgba(0,0,0, 0.1)',
+  wechat_oa: [
+    (id) => `微信公众号：${id}`,
+    <i className="icon-[mingcute--wechat-fill]" />,
+    '#07C160',
+    () => `https://weixin.sogou.com/weixin?type=1&s_from=input&query=${encodeURIComponent('蛋黄派的日常')}`,
   ],
   redbook: [
     '小红书🚫已被禁言',
@@ -125,6 +124,7 @@ export const SocialIcon = memo((props: SocialIconProps) => {
 
   if (!name) return null
   const href = hrefFn(id)
+  const label = typeof name === 'function' ? name(id) : name
 
   return (
     <FloatPopover
@@ -148,7 +148,7 @@ export const SocialIcon = memo((props: SocialIconProps) => {
         </MotionButtonBase>
       }
     >
-      {name}
+      {label}
     </FloatPopover>
   )
 })
