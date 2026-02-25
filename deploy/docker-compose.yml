@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:2323"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:2323"]
       interval: 10s
       timeout: 5s
       retries: 3
