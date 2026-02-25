@@ -55,6 +55,12 @@ if docker compose up -d --wait --wait-timeout 120; then
 else
     log_error "New container failed health check. Rolling back..."
 
+    # Dump logs and health check details before rollback
+    log_warn "=== Container logs ==="
+    docker logs "$CONTAINER_NAME" --tail 50 2>&1
+    log_warn "=== Health check details ==="
+    docker inspect "$CONTAINER_NAME" --format='{{json .State.Health}}' 2>/dev/null | python3 -m json.tool 2>/dev/null || true
+
     # If there was an old container, try to restore it
     if [ -n "$OLD_IMAGE_ID" ]; then
         log_warn "Attempting to restore previous version..."
