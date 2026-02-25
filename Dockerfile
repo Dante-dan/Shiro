@@ -78,6 +78,6 @@ EXPOSE 2323
 
 # Health check for zero-downtime deployment
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-  CMD wget -q --spider http://localhost:2323 || exit 1
+  CMD wget -q --spider http://127.0.0.1:2323 || exit 1
 
 CMD ["node", "server.js"]
