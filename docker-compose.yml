@@ -11,3 +11,9 @@ services:
       - NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
     ports:
       - 2323:2323
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:2323"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
