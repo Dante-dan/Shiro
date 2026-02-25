@@ -8,16 +8,19 @@ import { NeteaseCloudMusicIcon } from '~/components/icons/platform/NeteaseIcon'
 import { XIcon } from '~/components/icons/platform/XIcon'
 import { MotionButtonBase } from '~/components/ui/button'
 import { FloatPopover } from '~/components/ui/float-popover'
+import { toast } from '~/lib/toast'
 
 interface SocialIconProps {
   type: string
   id: string
 }
 
-const iconSet: Record<
-  string,
-  [string | ((id: string) => string), ReactNode, string, (id: string) => string] | [string | ((id: string) => string), ReactNode, string, (id: string) => string, string]
-> = {
+type IconConfig =
+  | [string | ((id: string) => string), ReactNode, string, (id: string) => string]
+  | [string | ((id: string) => string), ReactNode, string, (id: string) => string, string]
+  | [string | ((id: string) => string), ReactNode, string, null, string | undefined, (id: string) => void]
+
+const iconSet: Record<string, IconConfig> = {
   github: [
     '对我的开发感兴趣 Github',
     <i className="icon-[mingcute--github-line]" />,
@@ -28,7 +31,12 @@ const iconSet: Record<
     (id) => `微信公众号：${id}`,
     <i className="icon-[mingcute--wechat-fill]" />,
     '#07C160',
-    () => `https://weixin.sogou.com/weixin?type=1&s_from=input&query=${encodeURIComponent('蛋黄派的日常')}`,
+    null,
+    undefined,
+    (id) => {
+      navigator.clipboard.writeText(id)
+      toast.success(`已复制「${id}」，请前往微信搜索关注`)
+    },
   ],
   redbook: [
     '小红书🚫已被禁言',
@@ -117,14 +125,32 @@ export const isSupportIcon = (icon: string) => icons.includes(icon)
 export const SocialIcon = memo((props: SocialIconProps) => {
   const { id, type } = props
 
-  const [name, Icon, iconBg, hrefFn, borderColor] = useMemo(() => {
-    const [name, Icon, iconBg, hrefFn, borderColor] = (iconSet as any)[type as any] || []
-    return [name, Icon, iconBg, hrefFn, borderColor]
+  const [name, Icon, iconBg, hrefFn, borderColor, onClickFn] = useMemo(() => {
+    const config = (iconSet as any)[type as any] || []
+    return [config[0], config[1], config[2], config[3], config[4], config[5]]
   }, [type])
 
   if (!name) return null
-  const href = hrefFn(id)
   const label = typeof name === 'function' ? name(id) : name
+
+  const inner = onClickFn ? (
+    <button
+      type="button"
+      className="flex center"
+      onClick={() => onClickFn(id)}
+    >
+      {Icon}
+    </button>
+  ) : (
+    <a
+      target="_blank"
+      href={hrefFn(id)}
+      className="flex center"
+      rel="noreferrer"
+    >
+      {Icon}
+    </a>
+  )
 
   return (
     <FloatPopover
@@ -137,14 +163,7 @@ export const SocialIcon = memo((props: SocialIconProps) => {
             border: borderColor ? `dashed 0.5px ${borderColor}` : 'none',
           }}
         >
-          <a
-            target="_blank"
-            href={href}
-            className="flex center"
-            rel="noreferrer"
-          >
-            {Icon}
-          </a>
+          {inner}
         </MotionButtonBase>
       }
     >
