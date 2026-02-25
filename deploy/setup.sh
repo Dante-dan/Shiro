@@ -50,7 +50,7 @@ fi
 
 # Start new container with health check wait
 log_info "Starting new container..."
-if docker compose up -d --wait --wait-timeout 60; then
+if docker compose up -d --wait --wait-timeout 120; then
     log_info "New container is healthy and running!"
 else
     log_error "New container failed health check. Rolling back..."
