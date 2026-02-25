@@ -1,19 +1,15 @@
-version: '3'
-
 services:
   shiro:
-    container_name: shiro
     image: ghcr.io/dante-dan/shiro:latest
-    volumes:
-      - ./.env:/app/.env
-    restart: always
-    environment:
-      - NEXT_SHARP_PATH=/usr/local/lib/node_modules/sharp
+    container_name: shiro
+    restart: unless-stopped
     ports:
-      - 2323:2323
+      - "127.0.0.1:2323:2323"
+    env_file:
+      - .env
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:2323"]
       interval: 10s
       timeout: 5s
-      start_period: 30s
       retries: 3
+      start_period: 30s
